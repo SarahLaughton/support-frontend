@@ -41,7 +41,7 @@ import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import {
-  checkoutFormShouldSubmit,
+  checkoutFormShouldSubmit, formElementIsValid,
   getForm,
 } from 'helpers/checkoutForm/checkoutForm';
 import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
@@ -71,12 +71,13 @@ export type Action =
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_ERROR', passwordError: boolean }
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
+  | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
-  | { type: 'FORM_VALID', isValid: boolean };
+  | { type: 'SET_FORM_IS_VALID', isValid: boolean };
 
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action => {
@@ -133,7 +134,7 @@ const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING
 
 const paymentFailure = (paymentError: CheckoutFailureReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
 
-const setFormIsValid = (isValid: boolean): Action => ({ type: 'FORM_VALID', isValid });
+const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
 const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
   ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
@@ -160,22 +161,8 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
   userTypeFromIdentityResponse,
 });
 
-const togglePayPalButton = () =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-    const shouldEnable = checkoutFormShouldSubmit(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      state.page.form.userTypeFromIdentityResponse,
-      // TODO: use the actual form state rather than re-fetching from DOM
-      getForm('form--contribution'),
-    );
-    if (shouldEnable && window.enablePayPalButton) {
-      window.enablePayPalButton();
-    } else if (window.disablePayPalButton) {
-      window.disablePayPalButton();
-    }
-  };
+const setFormIsSubmittable = (formIsSubmittable: boolean): Action =>
+  ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -191,10 +178,31 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
-function setValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
-  return (dispatch: Function): void => {
+function setValue<T>(setStateValue: T => Action, value: T) {
+  return (dispatch: Function, getState: () => State): void => {
+
     dispatch(setStateValue(value));
-    dispatch(togglePayPalButton());
+
+    const state = getState();
+
+    // TODO: use the actual form state rather than re-fetching from DOM
+    const valid = formElementIsValid(getForm('form--contribution'));
+
+    dispatch(setFormIsValid(valid));
+
+    const shouldEnable = checkoutFormShouldSubmit(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      state.page.form.userTypeFromIdentityResponse,
+      valid,
+    );
+    if (shouldEnable && window.enablePayPalButton) {
+      dispatch(setFormIsSubmittable(true));
+      window.enablePayPalButton();
+    } else if (window.disablePayPalButton) {
+      dispatch(setFormIsSubmittable(false));
+      window.disablePayPalButton();
+    }
   };
 }
 
@@ -209,7 +217,7 @@ const checkIfEmailHasPassword = (email: string) =>
       isSignedIn,
       csrf,
       (userType: UserTypeFromIdentityResponse) =>
-        dispatch(setValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
+        dispatch(setValue<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
 
@@ -460,8 +468,8 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
-  togglePayPalButton,
-  setValueAndTogglePayPal,
+  setFormIsSubmittable,
+  setValue,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
 };

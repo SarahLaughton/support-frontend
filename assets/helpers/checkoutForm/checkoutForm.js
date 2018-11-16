@@ -91,9 +91,9 @@ export function checkoutFormShouldSubmit(
   contributionType: Contrib,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  form: Object | null,
+  formValid: boolean,
 ) {
-  return formElementIsValid(form)
+  return formValid
     && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
 }
 
