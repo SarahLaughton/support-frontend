@@ -172,6 +172,7 @@ const sendFormSubmitEventForPayPalRecurring = () =>
       flowPrefix: 'npf',
       form: getForm('form--contribution'),
       isSignedIn: state.page.user.isSignedIn,
+      isRecurringContributor: state.page.user.isRecurringContributor,
       setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
       setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
     };
@@ -220,6 +221,7 @@ const checkIfEmailHasPassword = (email: string) =>
         dispatch(setValue<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
+
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
