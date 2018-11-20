@@ -58,7 +58,7 @@ function getUserTypeFromIdentity(
     });
 }
 
-function canContributeWithoutSigningIn(
+function userCanContributeWithoutSigningIn(
   contributionType: Contrib,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
@@ -70,4 +70,4 @@ function canContributeWithoutSigningIn(
 }
 
 
-export { getUserTypeFromIdentity, canContributeWithoutSigningIn };
+export { getUserTypeFromIdentity, userCanContributeWithoutSigningIn };
