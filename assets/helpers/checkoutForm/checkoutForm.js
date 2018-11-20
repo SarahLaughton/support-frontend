@@ -1,7 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
