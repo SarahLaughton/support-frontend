@@ -50,7 +50,7 @@ import {
 } from './contributionsLandingReducer';
 
 export type Action =
-  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType, paymentMethodToSelect: PaymentMethod }
+  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
@@ -77,14 +77,9 @@ export type Action =
   | { type: 'SET_FORM_IS_VALID', isValid: boolean };
 
 
-const updateContributionType = (contributionType: ContributionType, paymentMethodToSelect: PaymentMethod): Action => {
-  // PayPal one-off redirects away from the site before hitting the thank you page
-  // so we need to store the contrib type & payment method in the storage so that it is available on the
-  // thank you page in all scenarios.
-  storage.setSession('contributionType', contributionType);
-  storage.setSession('paymentMethod', paymentMethodToSelect);
-  return ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType, paymentMethodToSelect });
-};
+// Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
+const updateContributionType = (contributionType: ContributionType): Action =>
+  ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType });
 
 const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
   // PayPal one-off redirects away from the site before hitting the thank you page
@@ -219,6 +214,18 @@ function setFormSubmissionDependentValue<T>(setStateValue: T => Action, value: T
     dispatch(enableOrDisableForm());
   };
 }
+
+const updateContributionTypeAndPaymentMethod =
+  (contributionType: ContributionType, paymentMethodToSelect: PaymentMethod) =>
+    (dispatch: Function): void => {
+      // PayPal one-off redirects away from the site before hitting the thank you page
+      // so we need to store the contrib type & payment method in the storage so that it is available on the
+      // thank you page in all scenarios.
+      storage.setSession('contributionType', contributionType);
+      storage.setSession('paymentMethod', paymentMethodToSelect);
+      dispatch(setFormSubmissionDependentValue<ContributionType>(updateContributionType, contributionType));
+      dispatch(updatePaymentMethod(paymentMethodToSelect));
+    };
 
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
@@ -458,7 +465,7 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
   };
 
 export {
-  updateContributionType,
+  updateContributionTypeAndPaymentMethod,
   updatePaymentMethod,
   updateFirstName,
   updateLastName,
