@@ -17,7 +17,7 @@ import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
 import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
 import * as storage from 'helpers/storage';
-import { type UserTypeFromIdentity } from 'helpers/identityApis';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
@@ -68,7 +68,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentity,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
 };

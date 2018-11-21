@@ -1,7 +1,7 @@
 // @flow
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import { invalidReason } from 'helpers/checkoutForm/checkoutForm';
-import type { UserTypeFromIdentity } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
 type OldFlowOrNewFlow = 'opf' | 'npf';
@@ -11,7 +11,7 @@ export type FormSubmitParameters = {
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentity,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   handlePayment?: () => void,
