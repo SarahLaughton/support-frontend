@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 import { type ContributionType } from 'helpers/contributions';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { type UserTypeFromIdentity } from 'helpers/identityApis';
 import { userCanContributeWithoutSigningIn } from 'helpers/identityApis';
 
 // Copied from
@@ -89,7 +89,7 @@ export const formIsValid = (formClassName: string) => formElementIsValid(getForm
 export function checkoutFormShouldSubmit(
   contributionType: ContributionType,
   isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  userTypeFromIdentityResponse: UserTypeFromIdentity,
   form: Object | null,
 ) {
   return formElementIsValid(form)

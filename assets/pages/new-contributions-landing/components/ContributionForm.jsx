@@ -32,7 +32,7 @@ import {
   maxTwoDecimals,
 } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { type UserTypeFromIdentity } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import ContributionTypeTabs from './ContributionTypeTabs';
@@ -70,7 +70,7 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  userTypeFromIdentityResponse: UserTypeFromIdentity,
   isSignedIn: boolean,
   formIsValid: boolean,
   formIsSubmittable: boolean,
