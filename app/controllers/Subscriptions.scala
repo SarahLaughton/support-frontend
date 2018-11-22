@@ -109,7 +109,7 @@ class Subscriptions(
     val title = "The Guardian Weekly Subscriptions | The Guardian"
     val id = "weekly-landing-page-" + countryCode
     val js = "weeklySubscriptionLandingPage.js"
-    val css = "weeklySubscriptionLandingPageStyles.css"
+    val css = "weeklySubscriptionLandingPage.css"
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
     val hrefLangLinks = Map(
@@ -121,11 +121,15 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("int"),
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
-    Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
+    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
   }
 
   def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
     Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
+  }
+
+  def paperMethodRedirectTo(method: String): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(Some(method)), request.queryString, status = FOUND)
   }
 
   def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -156,8 +160,8 @@ class Subscriptions(
       }
     }
 
-  def buildCanonicalPaperSubscriptionLink(method: String = "collection"): String =
-    s"${supportUrl}/subscribe/paper/${method}"
+  def buildCanonicalPaperSubscriptionLink(method: Option[String] = None): String =
+    s"${supportUrl}/uk/subscribe/paper/${method.getOrElse("collection")}"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"

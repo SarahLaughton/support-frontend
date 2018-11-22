@@ -5,12 +5,12 @@
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { type Action as UserAction } from 'helpers/user/userActions';
 import { formElementIsValid, getForm } from 'helpers/checkoutForm/checkoutForm';
+import { contributionTypeIsRecurring } from 'helpers/contributions';
 import type { State } from './contributionsLandingReducer';
 import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
-
 
 // ----- Types ----- //
 
@@ -35,20 +35,25 @@ function enableOrDisableForm() {
   return (dispatch: Function, getState: () => State): void => {
 
     const state = getState();
-    const { isRecurringContributor } = state.page.user;
+    const { isRecurringContributor, isSignedIn } = state.page.user;
+    const { contributionType, userTypeFromIdentityResponse } = state.page.form;
+
     const userCanContributeWithoutSigningIn = canContributeWithoutSigningIn(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      state.page.form.userTypeFromIdentityResponse,
+      contributionType,
+      isSignedIn,
+      userTypeFromIdentityResponse,
     );
 
     const formIsValid = formElementIsValid(getForm('form--contribution'));
     dispatch(setFormIsValid(formIsValid));
 
+    const shouldBlockExistingRecurringContributor =
+      isRecurringContributor && contributionTypeIsRecurring(contributionType);
+
     const shouldEnable =
       formIsValid
-      && !isRecurringContributor
-      && userCanContributeWithoutSigningIn;
+      && userCanContributeWithoutSigningIn
+      && !(shouldBlockExistingRecurringContributor);
 
     dispatch(setFormIsSubmittable(shouldEnable));
   };

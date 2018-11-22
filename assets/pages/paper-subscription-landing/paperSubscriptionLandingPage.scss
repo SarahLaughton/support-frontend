@@ -7,3 +7,13 @@
 
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
+@import '~components/headingBlock/headingBlock';
+@import '~components/leftMarginSection/leftMarginSection';
+
+:root {
+  scroll-behavior: smooth;
+}
+
+.component-product-page-hero--paper .component-left-margin-section__content {
+  padding-top: 20em;
+}

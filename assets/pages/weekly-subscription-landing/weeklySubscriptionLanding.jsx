@@ -20,9 +20,12 @@ import ProductPageContentBlock, { outsetClassName } from 'components/productPage
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
+import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
+
+import './weeklySubscriptionLanding.scss';
 
 // ----- Redux Store ----- //
 
@@ -108,6 +111,9 @@ const content = (
           <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>
         <WeeklyForm />
+        <ProductPageInfoChip>
+          You can cancel your subscription at any time
+        </ProductPageInfoChip>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Gift subscriptions">
