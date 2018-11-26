@@ -82,8 +82,6 @@ export const formElementIsValid = (formElement: Object | null) => {
   return false;
 };
 
-export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
-
 export function getTitle(contributionType: ContributionType): string {
 
   switch (contributionType) {

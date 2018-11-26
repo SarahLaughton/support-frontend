@@ -6,9 +6,12 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { getFrequency, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type { CaState, UsState } from 'helpers/internationalisation/country';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { hiddenIf } from 'helpers/utilities';
@@ -28,7 +31,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
   isWaiting: boolean,
-  selectedAmounts: { [ContributionType]: Amount | 'other' },
+  selectedAmounts: SelectedAmounts,
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
@@ -82,6 +85,17 @@ function ContributionSubmit(props: PropTypes) {
     const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
+
+    const formIsValidParameters = {
+      selectedAmounts: props.selectedAmounts,
+      otherAmounts: props.otherAmounts,
+      countryGroupId: props.countryGroupId,
+      contributionType: props.contributionType,
+      state: props.state,
+      firstName: props.firstName,
+      lastName: props.lastName,
+      email: props.email,
+    };
 
     // We have to show/hide PayPalRecurringButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
