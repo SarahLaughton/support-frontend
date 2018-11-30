@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { ErrorReason } from 'helpers/errorReasons';
+import type { Dispatch } from 'redux';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
@@ -49,6 +50,7 @@ import {
   type UserFormData,
   type ThankYouPageStage,
 } from './contributionsLandingReducer';
+import type { Dispatchs } from 'pages/new-contributions-landing/components/ContributionFormFields';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -168,7 +170,7 @@ const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
-    (dispatch: Function): void => {
+    (dispatch: Dispatchs<Action>): void => {
       dispatch(setFormSubmissionDependentValue(() =>
         ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
     };

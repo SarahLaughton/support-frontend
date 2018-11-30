@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { type ContributionType } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
@@ -31,6 +32,7 @@ import {
   updateState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
+import type { Action } from '../../new-contributions-landing/contributionsLandingActions';
 
 
 // ----- Types ----- //
@@ -71,11 +73,25 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
 });
 
-const mapDispatchToProps = (dispatch: Function) => ({
+
+export type GetState<S> = () => S;
+export type PromiseAction<A> = Promise<A>;
+
+export type ThunkAction<S, A> = (
+  dispatch: Dispatchs<S, A>,
+  getState: GetState<S>
+) => void;
+
+export type Dispatchs<S, A> = (
+  action: A | ThunkAction<S, A> | PromiseAction<A>
+) => void;
+
+
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
-  updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
+  updateState: (event) => { dispatch(updateState, event.target.value === '' ? null : event.target.value); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
