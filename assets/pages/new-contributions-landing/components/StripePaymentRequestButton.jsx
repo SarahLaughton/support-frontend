@@ -133,7 +133,7 @@ function onClick(event, props: PropTypes) {
 }
 
 // Set this to true to enable Google Pay (good for development)
-const weAreSupportingGooglePay = false;
+const weAreSupportingGooglePay = true;
 
 // The value of result will either be:
 // . null - browser has no compatible payment method)
