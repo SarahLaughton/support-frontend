@@ -464,6 +464,8 @@ header[role="banner"] {
 }
 
 @supports(display: grid) {
+
+
   .gu-content {
     display: grid;
     grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];

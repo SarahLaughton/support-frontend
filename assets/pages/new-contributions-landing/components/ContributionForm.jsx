@@ -105,7 +105,7 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
-  applePayTestVariant: state.common.abParticipations.applePay,
+  applePayTestVariant: state.common.abParticipations.applePayTwo,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
 });
 

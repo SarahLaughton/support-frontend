@@ -18,7 +18,8 @@
   regularUatPayPalConfig: PayPalConfig,
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
-  idUser: Option[IdUser]
+  idUser: Option[IdUser],
+  userAgent: Option[String]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
 @scripts = {
@@ -36,6 +37,10 @@
           lastName: "@lastName",
         }
       };
+    };
+
+    @userAgent.map { ua =>
+      window.guardian.userAgent = "@ua"
     };
     window.guardian.stripeKeyDefaultCurrencies = {
       ONE_OFF: {

@@ -84,7 +84,7 @@ export const tests: Tests = {
     seed: 6,
   },
 
-  applePay: {
+  applePayTwo: {
     variants: ['control', 'applePay'],
     audiences: {
       ALL: {

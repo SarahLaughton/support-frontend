@@ -18,6 +18,9 @@ import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
+import net.sf.uadetector.service.UADetectorServiceFactory
+import net.sf.uadetector.UserAgent
+import net.sf.uadetector.UserAgentStringParser
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -109,6 +112,12 @@ class Application(
   }
 
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
+
+    val parser = UADetectorServiceFactory.getResourceModuleParser
+    SafeLogger.info("testing testing\n")
+    request.headers.get("user-agent").map(x => SafeLogger.info(x))
+    val userAgent = request.headers.get("user-agent").map(parser.parse(_).toString)
+
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
@@ -123,7 +132,8 @@ class Application(
       regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      idUser = idUser
+      idUser = idUser,
+      userAgent = userAgent
     )
   }
 
