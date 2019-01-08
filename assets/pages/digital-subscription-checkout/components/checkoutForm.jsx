@@ -39,6 +39,7 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
+import type { PaymentAuthorisation, PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 
 // ----- Types ----- //
@@ -203,7 +204,7 @@ function CheckoutForm(props: PropTypes) {
         {errorState}
         <Button1 onClick={() => props.submitForm()}>Continue to payment</Button1>
         <DirectDebitPopUpForm
-          onPaymentAuthorisation={(pr) => { props.onPaymentAuthorised(pr); }}
+          onPaymentAuthorisation={(pa: PaymentAuthorisation) => { props.onPaymentAuthorised(pa); }}
         />
       </LeftMarginSection>
     </div>
