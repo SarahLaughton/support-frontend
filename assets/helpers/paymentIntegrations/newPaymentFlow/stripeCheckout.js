@@ -28,19 +28,19 @@ export type StripeAccount = 'ONE_OFF' | 'REGULAR';
 // ----- Functions ----- //
 
 function loadStripe(): Promise<void> {
-  if (!window.StripeCheckout) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-
-      script.onload = resolve;
-      script.onerror = reject;
-      script.src = 'https://checkout.stripe.com/checkout.js';
-
-      if (document.head) {
-        document.head.appendChild(script);
-      }
-    });
-  }
+  // if (!window.StripeCheckout) {
+  //   return new Promise((resolve, reject) => {
+  //     const script = document.createElement('script');
+  //
+  //     script.onload = resolve;
+  //     script.onerror = reject;
+  //     script.src = 'https://checkout.stripe.com/checkout.js';
+  //
+  //     if (document.head) {
+  //       document.head.appendChild(script);
+  //     }
+  //   });
+  // }
   return Promise.resolve();
 
 }
