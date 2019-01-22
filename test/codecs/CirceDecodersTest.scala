@@ -1,6 +1,8 @@
 package codecs
 
 import admin._
+import admin.settings.SwitchState.{Off, On}
+import admin.settings._
 import cats.syntax.either._
 import codecs.CirceDecoders._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
@@ -10,7 +12,6 @@ import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{Json, JsonObject}
 import models.CheckBankAccountDetails
-import SwitchState._
 import models.ZuoraCatalog._
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
@@ -158,8 +159,90 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |      }
           |    },
           |    "optimize": "Off"
+          |  },
+          |  "amounts": {
+          |    "ONE_OFF": {
+          |        "GBPCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "UnitedStates": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "EURCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "AUDCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "International": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "NZDCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "Canada": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "MONTHLY": {
+          |        "GBPCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "UnitedStates": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "EURCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "AUDCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "International": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "NZDCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "Canada": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "ANNUAL": {
+          |        "GBPCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "UnitedStates": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "EURCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "AUDCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "International": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "NZDCountries": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "Canada": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    }
           |  }
           |}""".stripMargin
+
+      val amount = Amount(value = 25, isDefault = Some(true))
+      val amountsRegions = AmountsRegions(
+        GBPCountries = List(amount),
+        UnitedStates = List(amount),
+        EURCountries = List(amount),
+        AUDCountries = List(amount),
+        International = List(amount),
+        NZDCountries = List(amount),
+        Canada = List(amount)
+      )
 
       val settings = AllSettings(
         Switches(
@@ -181,6 +264,11 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
             )
           ),
           optimize = Off
+        ),
+        Amounts(
+          ONE_OFF = amountsRegions,
+          MONTHLY = amountsRegions,
+          ANNUAL = amountsRegions
         )
       )
 

@@ -1,8 +1,8 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, AllSettings, AllSettingsProvider, Switches}
+import admin.settings._
+import admin.settings.SwitchState.On
 import cats.implicits._
 import com.gu.support.config._
 import com.gu.tip.Tip
@@ -35,7 +35,10 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(
-        AllSettings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
+        AllSettings(
+          Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On),
+          Amounts(AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil),AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil),AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil))
+        )
       )
 
       val client = mock[SupportWorkersClient]
