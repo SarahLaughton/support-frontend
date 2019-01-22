@@ -1,9 +1,9 @@
 package views
 
+import admin.settings.AllSettings
 import play.api.mvc.RequestHeader
-import play.twirl.api.{HtmlFormat, Html}
-import admin.AllSettings
-import admin.AllSettings.allSettingsCodec
+import play.twirl.api.{Html, HtmlFormat}
+import admin.settings.AllSettings.allSettingsCodec
 import io.circe.Printer
 import io.circe.syntax._
 

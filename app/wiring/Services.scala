@@ -1,6 +1,6 @@
 package wiring
 
-import admin.{AllSettingsProvider, SettingsProvider}
+import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents

@@ -1,6 +1,6 @@
 package config
 
-import admin.{SettingsSource, SettingsSources}
+import admin.settings.SettingsSources
 import cats.syntax.either._
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
