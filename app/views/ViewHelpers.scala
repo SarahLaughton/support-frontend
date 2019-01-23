@@ -17,5 +17,5 @@ object ViewHelpers {
   def printSettings(settings: AllSettings): String =
     settings
       .asJson
-      .pretty(Printer.spaces2.copy(dropNullValues = true))
+      .pretty(Printer.noSpaces.copy(dropNullValues = true))
 }
