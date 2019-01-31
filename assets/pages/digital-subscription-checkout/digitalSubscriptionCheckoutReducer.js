@@ -40,6 +40,11 @@ type PaymentMethod = 'Stripe' | 'DirectDebit';
 export type FormFields = {|
   firstName: string,
   lastName: string,
+  addressLine1: string,
+  addressLine2: string,
+  townCity: string,
+  county: string,
+  postcode: string,
   email: string,
   country: Option<IsoCountry>,
   stateProvince: Option<StateProvince>,
@@ -70,6 +75,11 @@ export type Action =
   | { type: 'SET_STAGE', stage: Stage }
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
+  | { type: 'SET_ADDRESS_LINE_1', addressLine1: string }
+  | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
+  | { type: 'SET_TOWN_CITY', townCity: string }
+  | { type: 'SET_COUNTY', county: string }
+  | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
@@ -88,6 +98,11 @@ function getFormFields(state: State): FormFields {
     firstName: state.page.checkout.firstName,
     email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
+    addressLine1: state.page.checkout.addressLine1,
+    addressLine2: state.page.checkout.addressLine2,
+    townCity: state.page.checkout.townCity,
+    county: state.page.checkout.county,
+    postcode: state.page.checkout.postcode,
     country: state.page.checkout.country,
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
@@ -112,6 +127,18 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
     {
       rule: nonEmptyString(fields.lastName),
       error: formError('lastName', 'Please enter a value.'),
+    },
+    {
+      rule: nonEmptyString(fields.addressLine1),
+      error: formError('addressLine1', 'Please enter a value'),
+    },
+    {
+      rule: nonEmptyString(fields.townCity),
+      error: formError('townCity', 'Please enter a value'),
+    },
+    {
+      rule: nonEmptyString(fields.postcode),
+      error: formError('postcode', 'Please enter a value'),
     },
     {
       rule: notNull(fields.country),
@@ -149,7 +176,12 @@ const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
+  setAddressLine1: (addressLine1: string): Action => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }),
+  setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
+  setTownCity: (townCity: string): Action => ({ type: 'SET_TOWN_CITY', townCity }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
+  setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
+  setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
@@ -174,6 +206,11 @@ function initReducer(countryGroupId: CountryGroupId) {
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
+    addressLine1: '',
+    addressLine2: '',
+    townCity: '',
+    county: '',
+    postcode: '',
     country: user.country || null,
     stateProvince: null,
     telephone: '',
@@ -197,6 +234,21 @@ function initReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName };
+
+      case 'SET_ADDRESS_LINE_1':
+        return { ...state, addressLine1: action.addressLine1 };
+
+      case 'SET_ADDRESS_LINE_2':
+        return { ...state, addressLine2: action.addressLine2 };
+
+      case 'SET_TOWN_CITY':
+        return { ...state, townCity: action.townCity };
+
+      case 'SET_COUNTY':
+        return { ...state, county: action.county };
+
+      case 'SET_POSTCODE':
+        return { ...state, postcode: action.postcode };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };

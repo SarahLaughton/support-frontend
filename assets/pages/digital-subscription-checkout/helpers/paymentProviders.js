@@ -23,6 +23,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const {
     firstName,
     lastName,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     email,
     country,
     stateProvince,
@@ -40,6 +45,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   return {
     firstName,
     lastName,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     country: country || 'GB',
     state: stateProvince,
     email,
